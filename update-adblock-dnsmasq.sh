@@ -43,10 +43,6 @@ then
 	echo "Removing duplicates and formatting the list of domains..."
 	cat $temp_ad_file | sed $'s/\r$//' | sort | uniq | sed '/^$/d' | awk '{sub(/\r$/,""); print "address=/"$0"/0.0.0.0"}' > $temp_ad_file2
 
-
-
-        sed -i -e '/\.kat\.am/d' $temp_ad_file2
-
         echo "address=/internalredirect.site/0.0.0.0" >> $temp_ad_file2
 
 
