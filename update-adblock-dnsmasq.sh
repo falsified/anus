@@ -30,16 +30,18 @@ curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' -
 
 if [ -f "$temp_ad_file" ]
 then
-		# Sort the aggregated results and remove any duplicates
-		# Remove entries from the whitelist file if it exists at the root of the current user's home folder
+	# Sort the aggregated results and remove any duplicates
+	# Remove entries from the whitelist file if it exists at the root of the current user's home folder
 
 
         sed -i -e '/\.kat\.am/d' $temp_ad_file2
         sed -i -e '/\.amazon\.com/d' $temp_ad_file2
+        sed -i -e '/\.microsoft\.com/d' $temp_ad_file2
+        sed -i -e '/skype\.com/d' $temp_ad_file2
 
 
-		echo "Removing duplicates and formatting the list of domains..."
-		cat $temp_ad_file | sed $'s/\r$//' | sort | uniq | sed '/^$/d' | awk '{sub(/\r$/,""); print "address=/"$0"/0.0.0.0"}' > $temp_ad_file2
+	echo "Removing duplicates and formatting the list of domains..."
+	cat $temp_ad_file | sed $'s/\r$//' | sort | uniq | sed '/^$/d' | awk '{sub(/\r$/,""); print "address=/"$0"/0.0.0.0"}' > $temp_ad_file2
 
 
 
@@ -51,9 +53,9 @@ then
         mv $temp_ad_file2 $ad_file
         rm /etc/dnsmasq.d/dnsmasq.adlist.conf.*
 
-		# Count how many domains/whitelists were added so it can be displayed to the user
-		numberOfAdsBlocked=$(cat $ad_file | wc -l | sed 's/^[ \t]*//')
-		echo "$numberOfAdsBlocked ad domains blocked."
+	# Count how many domains/whitelists were added so it can be displayed to the user
+	numberOfAdsBlocked=$(cat $ad_file | wc -l | sed 's/^[ \t]*//')
+	echo "$numberOfAdsBlocked ad domains blocked."
 
 else
         echo "Error building the ad list, please try again."
